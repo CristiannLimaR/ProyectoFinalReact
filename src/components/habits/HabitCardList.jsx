@@ -3,8 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { HabitActions } from './HabitActions';
 import { HabitDayTracker } from './HabitDayTracker';
 
-export const HabitCardList = ({ habits = [] }) => {
-
+export const HabitCardList = ({ habits = [], onEdit }) => {
   return (
     <>
       {habits.map(habit => (
@@ -22,7 +21,7 @@ export const HabitCardList = ({ habits = [] }) => {
                 <Badge variant="secondary">
                   {habit.streak} días de racha
                 </Badge>
-                <HabitActions habitId={habit.id} />
+                <HabitActions habitId={habit.id} onEdit={() => onEdit(habit)} />
               </div>
             </div>
           </CardHeader>
@@ -33,4 +32,4 @@ export const HabitCardList = ({ habits = [] }) => {
       ))}
     </>
   );
-}
+};

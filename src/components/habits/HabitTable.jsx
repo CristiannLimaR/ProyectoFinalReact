@@ -14,7 +14,7 @@ import {
   import { useState, useEffect } from 'react';
   import { CheckCircle } from 'lucide-react';
   
-  export function HabitTable({ habits }) {
+  export function HabitTable({ habits, onEdit }) {
     const { dispatch } = useHabitsContext();
     const [currentDate, setCurrentDate] = useState(new Date());
     const [dates, setDates] = useState([]);
@@ -126,7 +126,7 @@ import {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
-                    <HabitActions habitId={habit.id} />
+                    <HabitActions habitId={habit.id} onEdit={() => onEdit(habit)} />
                   </TableCell>
                 </TableRow>
               ))}
