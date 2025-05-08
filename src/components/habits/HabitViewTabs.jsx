@@ -1,8 +1,8 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { HabitCardList } from './HabitCardlist';
+import { HabitCardList } from './HabitCardList';
 import { HabitTable } from './HabitTable';
 
-export const HabitViewTabs = ({ habits = [] }) => {
+export const HabitViewTabs = ({ habits = [], onEdit }) => {
 
 
   return (
@@ -15,11 +15,11 @@ export const HabitViewTabs = ({ habits = [] }) => {
       </div>
 
       <TabsContent value="cards" className="space-y-4">
-        <HabitCardList habits={habits} />
+        <HabitCardList habits={habits} onEdit={onEdit} />
       </TabsContent>
 
       <TabsContent value="table">
-        <HabitTable habits={habits} />
+        <HabitTable habits={habits} onEdit={onEdit} />
       </TabsContent>
     </Tabs>
   );

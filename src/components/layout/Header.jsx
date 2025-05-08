@@ -1,4 +1,4 @@
-import { Calendar, PlusCircle } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,10 +13,6 @@ export const Header = () => {
           <Button variant="outline" size="sm" className="ml-auto" onClick={() => navigate('/calendar')}>
             <Calendar size={16} className="mr-2" />
             Ver calendario
-          </Button>
-          <Button size="sm" onClick={() => navigate('/newhabit')}>
-            <PlusCircle size={16} className="mr-2" />
-            Nuevo hábito
           </Button>
         </div>
       </div>

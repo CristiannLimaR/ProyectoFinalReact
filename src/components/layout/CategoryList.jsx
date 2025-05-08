@@ -6,10 +6,10 @@ export const CategoryList = () => {
   const navigate = useNavigate();
 
   const categories = [
-    { name: 'salud', color: '#3182ce' },
-    { name: 'bienestar-mental', color: '#805ad5' },
-    { name: 'desarrollo-personal', color: '#dd6b20' },
-    { name: 'fitness', color: '#38a169' }
+    { id: 'salud', name: 'Salud', color: '#3182ce' },
+    { id: 'bienestar-mental', name: 'Bienestar Mental', color: '#805ad5' },
+    { id: 'desarrollo-personal', name: 'Desarrollo Personal', color: '#dd6b20' },
+    { id: 'fitness', name: 'Fitness', color: '#38a169' }
   ];
 
   const handleCategoryClick = (category) => {
@@ -25,10 +25,10 @@ export const CategoryList = () => {
       <div className="space-y-1 ml-1">
         {categories.map((category) => (
           <Button 
-            key={category.name} 
+            key={category.id} 
             variant="ghost" 
             className="w-full justify-start h-8"
-            onClick={() => handleCategoryClick(category.name)}
+            onClick={() => handleCategoryClick(category.id)}
           >
             <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: category.color }}></div>
             <span>{category.name}</span>

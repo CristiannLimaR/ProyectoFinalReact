@@ -10,9 +10,8 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { useNavigate, useParams } from 'react-router-dom';
 
 const CATEGORIES = [
   { id: 'salud', name: 'Salud' },
@@ -41,10 +40,8 @@ const DAYS = [
   { id: 6, name: 'Domingo' }
 ];
 
-export default function HabitForm() {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const { habits, dispatch } = useHabitsContext();
+export default function HabitForm({ onClose, habitToEdit = null }) {
+  const { dispatch } = useHabitsContext();
 
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
@@ -53,18 +50,14 @@ export default function HabitForm() {
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    if (id && habits.length > 0 && !isInitialized) {
-      const habitToEdit = habits.find(h => h.id === parseInt(id));
-      if (habitToEdit) {
-        setTitle(habitToEdit.title);
-        setCategory(habitToEdit.category);
-        setColor(habitToEdit.color);
-        setSelectedDays(habitToEdit.days);
-        setIsInitialized(true);
-      }
+    if (habitToEdit && !isInitialized) {
+      setTitle(habitToEdit.title);
+      setCategory(habitToEdit.category);
+      setColor(habitToEdit.color);
+      setSelectedDays(habitToEdit.days);
+      setIsInitialized(true);
     }
-  }, [id, habits, isInitialized]);
-  
+  }, [habitToEdit, isInitialized]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -74,11 +67,11 @@ export default function HabitForm() {
       return;
     }
 
-    if (id) {
+    if (habitToEdit) {
       dispatch({
         type: 'UPDATE_HABIT',
         payload: {
-          id: parseInt(id),
+          id: habitToEdit.id,
           data: { title, category, color, days: selectedDays }
         }
       });
@@ -95,7 +88,7 @@ export default function HabitForm() {
       dispatch({ type: 'ADD_HABIT', payload: newHabit });
     }
 
-    navigate('/');
+    onClose();
   };
 
   const handleDayToggle = (index) => {
@@ -104,94 +97,84 @@ export default function HabitForm() {
     setSelectedDays(newSelectedDays);
   };
 
-  if (id && !isInitialized) {
-    return <p className="text-center">Cargando hábito...</p>;
+  if (habitToEdit && !isInitialized) {
+    return null;
   }
   
   return (
-    
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader>
-        <CardTitle>{id ? 'Editar Hábito' : 'Nuevo Hábito'}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="title">Título</Label>
-            <Input
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Ej: Beber 2L de agua"
-            />
-          </div>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="title">Título</Label>
+        <Input
+          id="title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Ej: Beber 2L de agua"
+        />
+      </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="category">Categoría</Label>
-            {console.log(category)}
-            <Select value={category} onValueChange={setCategory}>
-              <SelectTrigger>
-                <SelectValue placeholder="Selecciona una categoría" />
-              </SelectTrigger>
-              <SelectContent>
-                {CATEGORIES.map(cat => (
-                  <SelectItem key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+      <div className="space-y-2">
+        <Label htmlFor="category">Categoría</Label>
+        <Select value={category} onValueChange={setCategory}>
+          <SelectTrigger>
+            <SelectValue placeholder="Selecciona una categoría" />
+          </SelectTrigger>
+          <SelectContent>
+            {CATEGORIES.map(cat => (
+              <SelectItem key={cat.id} value={cat.id}>
+                {cat.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="color">Color</Label>
-            {console.log(color)}
-            <Select value={color} onValueChange={setColor}>
-              <SelectTrigger>
-                <SelectValue placeholder="Selecciona un color" />
-              </SelectTrigger>
-              <SelectContent>
-                {COLORS.map(col => (
-                  <SelectItem key={col.id} value={col.value}>
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="w-4 h-4 rounded-full"
-                        style={{ backgroundColor: col.value }}
-                      />
-                      {col.name}
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <Label>Días de la semana</Label>
-            <div className="grid grid-cols-2 gap-2">
-              {DAYS.map(day => (
-                <div key={day.id} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={`day-${day.id}`}
-                    checked={selectedDays[day.id]}
-                    onCheckedChange={() => handleDayToggle(day.id)}
+      <div className="space-y-2">
+        <Label htmlFor="color">Color</Label>
+        <Select value={color} onValueChange={setColor}>
+          <SelectTrigger>
+            <SelectValue placeholder="Selecciona un color" />
+          </SelectTrigger>
+          <SelectContent>
+            {COLORS.map(col => (
+              <SelectItem key={col.id} value={col.value}>
+                <div className="flex items-center gap-2">
+                  <div
+                    className="w-4 h-4 rounded-full"
+                    style={{ backgroundColor: col.value }}
                   />
-                  <Label htmlFor={`day-${day.id}`}>{day.name}</Label>
+                  {col.name}
                 </div>
-              ))}
-            </div>
-          </div>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
-          <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => navigate('/')}>
-              Cancelar
-            </Button>
-            <Button type="submit">
-              {id ? 'Guardar Cambios' : 'Crear Hábito'}
-            </Button>
-          </div>
-        </form>
-      </CardContent>
-    </Card>
+      <div className="space-y-2">
+        <Label>Días de la semana</Label>
+        <div className="grid grid-cols-2 gap-2">
+          {DAYS.map(day => (
+            <div key={day.id} className="flex items-center space-x-2">
+              <Checkbox
+                id={`day-${day.id}`}
+                checked={selectedDays[day.id]}
+                onCheckedChange={() => handleDayToggle(day.id)}
+              />
+              <Label htmlFor={`day-${day.id}`}>{day.name}</Label>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex justify-end gap-2">
+        <Button type="button" variant="outline" onClick={onClose}>
+          Cancelar
+        </Button>
+        <Button type="submit">
+          {habitToEdit ? 'Guardar Cambios' : 'Crear Hábito'}
+        </Button>
+      </div>
+    </form>
   );
 }

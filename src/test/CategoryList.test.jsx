@@ -11,7 +11,7 @@ describe('Lista de Categorías', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText('salud')).toBeInTheDocument();
-    expect(screen.getByText('fitness')).toBeInTheDocument();
+    expect(screen.getByText('Salud')).toBeInTheDocument();
+    expect(screen.getByText('Fitness')).toBeInTheDocument();
   });
 }); 
