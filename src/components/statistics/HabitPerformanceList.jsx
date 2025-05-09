@@ -11,7 +11,7 @@ export function HabitPerformanceList({ habits }) {
           return total + (habit.completedDays[month] || []).length;
         }, 0);
         
-        const completionRate = Math.round((totalCompletedDays / (allMonths.length * 30)) * 100); // Asumiendo 30 días por mes
+        const completionRate = Math.round((totalCompletedDays / (allMonths.length * 30)) * 100); 
         
         return (
           <Card key={habit.id} className="overflow-hidden">

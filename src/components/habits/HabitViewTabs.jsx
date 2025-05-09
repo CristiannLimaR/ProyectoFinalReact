@@ -1,5 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { HabitCardList } from './HabitCardList';
+import { HabitCardList } from './HabitCardlist';
 import { HabitTable } from './HabitTable';
 
 export const HabitViewTabs = ({ habits = [], onEdit }) => {

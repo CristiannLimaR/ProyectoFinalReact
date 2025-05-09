@@ -3,20 +3,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 export function SummaryCards({ habits }) {
   const totalHabits = habits.length;
   
-  // Calcular la tasa de completado basada en los días completados del mes actual
-  const currentMonth = new Date().toISOString().slice(0, 7); // Formato: YYYY-MM
+  
+  const currentMonth = new Date().toISOString().slice(0, 7); 
   const completedHabits = habits.filter(habit => {
     const completedDays = habit.completedDays[currentMonth] || [];
     return completedDays
   }).length;
   
-  // Encontrar la mejor racha
+  
   const bestStreak = Math.max(...habits.map(habit => habit.streak));
   
-  // Encontrar la mejor categoría basada en el porcentaje de completado
+  
   const bestCategory = habits.reduce((best, current) => {
     const completedDays = current.completedDays[currentMonth] || [];
-    const currentCompletion = (completedDays.length / 30) * 100; // Asumiendo 30 días por mes
+    const currentCompletion = (completedDays.length / 30) * 100;
     return currentCompletion > best.completion ? { name: current.category, completion: currentCompletion } : best;
   }, { name: '', completion: 0 });
 
